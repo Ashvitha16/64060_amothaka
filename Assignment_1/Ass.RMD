@@ -1,0 +1,26 @@
+---
+title: "Untitled"
+output:
+  word_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r setup}
+
+data2 <- read.csv("C:/Users/mashv/OneDrive/Desktop/mlb_players.csv")
+data2
+View(data2)
+mean(data2$Height)
+sd(data2$Height)
+var(data2$Height)
+max(data2$Weight)
+min(data2$Weight)
+table(data2$Position)
+data2$Height_converted =  mean(data2$Height)/sd(data2$Height)
+hist(data2$Age)
+x = data2$Height
+y = data2$Weight
+plot(x, y, main="Age", xlab= "Height", ylab= "weight")
+```
+
