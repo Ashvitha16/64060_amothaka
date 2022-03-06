@@ -1,0 +1,106 @@
+---
+title: "Untitled"
+author: "Ashvitha M"
+date: "06/03/2022"
+output: pdf_document
+---
+
+```{r setup,}
+bank <- read.csv("C:/Users/mashv/Downloads/UniversalBank(1).csv")
+
+summary(bank)
+library(caret)
+library(ISLR)
+library(e1071)
+library(class)
+
+
+#converting variables
+
+bank$Personal.Loan <- factor(bank$Personal.Loan)
+bank$Online <- factor(bank$Online)
+bank$CreditCard <- factor(bank$CreditCard)
+
+
+#TASK A
+
+set.seed(64060)
+Train_index <- createDataPartition(bank$Personal.Loan, p =0.6, list = FALSE)
+train.df = bank[Train_index,]
+validation.df = bank[-Train_index,]
+
+mytable <- xtabs(~ CreditCard + Online + Personal.Loan , data = train.df)
+ftable(mytable)
+
+#Task B
+
+Probability =(59/(59+479))
+Probability
+
+#Task c
+
+#Create two separate pivot tables for the training data. One will have Loan (rows) as a 
+#function of Online (columns) and the other will have Loan (rows) as a function of CC. 
+
+table(Personal.Loan = train.df$Personal.Loan, Online = train.df$Online)
+table(Personal.Loan = train.df$Personal.Loan, CreditCard = train.df$CreditCard)
+table(Personal.Loan = train.df$Personal.Loan)
+
+
+
+#Task D
+
+#i P(CC = 1 | Loan = 1) (the proportion of credit card holders among the loan 
+Probability = (93/(93+195))
+Probability
+
+
+#ii P(Online = 1 | Loan = 1) 
+Probability2 =(179/(179+109))
+Probability2
+
+#iii P(Loan = 1) (the proportion of loan acceptors) 
+Probability3=(288/288+2712)
+Probability3
+
+#iv P(CC = 1 | Loan = 0) 
+Probability4=(788/(788+1924))
+Probability4
+
+#v P(Online = 1 | Loan = 0) 
+Probability5=(1631/(1631+1081))
+Probability5
+
+#vi P(Loan = 0)
+Probability6=(2712/2712+288)
+Probability6
+
+#Task E
+
+#Use the quantities computed above to compute the naive Ba1 probability 
+#P(Loan = 1 | CC = 1, Online = 1)
+
+naiveBayes_Probability <- (Probability*Probability2*Probability3)/((Probability*Probability2*Probability3)+
+(Probability4*Probability5*Probability6))
+
+naiveBayes_Probability 
+
+
+#Task F
+
+#Compare this value with the one obtained from the pivot table in (B). Which is a more 
+#accurate estimate?
+
+#0.9151253 in task E is very similar to task B 0.1096654. The different between the exact and naive bayes methods is #that the exact apporoach requires the same independent variable classification to predict, where as the navie bayes #method does not.
+
+#Task G
+
+#P(Loan = 1 | CC = 1, Online = 1)
+
+nb.model <- naiveBayes(Personal.Loan~ Online + CreditCard, data = train.df)
+To_Predict=data.frame(Online=1, CreditCard= 1)
+predict(nb.model, To_Predict,type = 'raw')
+
+
+```
+
